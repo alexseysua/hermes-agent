@@ -1,0 +1,353 @@
+- argument_hint:
+  - technical-question
+  category: core
+  description: Answer technical and architectural questions.
+  name: /ck:ask
+  path: ask.md
+  power_level: 1
+- argument_hint:
+  - user-requirements
+  category: bootstrap
+  description: Bootstrap project with parallel execution
+  name: /ck:bootstrap:multi
+  path: bootstrap/multi.md
+  power_level: 5
+- argument_hint:
+  - user-requirements
+  category: core
+  description: Bootstrap a new project step by step. Use --auto to skip approvals.
+  name: /ck:bootstrap
+  path: bootstrap.md
+  power_level: 5
+- argument_hint:
+  - question
+  category: core
+  description: Brainstorm a feature
+  name: /ck:brainstorm
+  path: brainstorm.md
+  power_level: 2
+- argument_hint:
+  - category|command|task description
+  category: core
+  description: ClaudeKit usage guide - just type naturally
+  name: /ck:ck-help
+  path: ck-help.md
+  power_level: 0
+- argument_hint:
+  - plan-path
+  category: code
+  description: Multi — execute parallel or sequential phases based on plan structure
+  name: /ck:code:multi
+  path: code/multi.md
+  power_level: 1
+- argument_hint:
+  - plan
+  category: core
+  description: Start coding & testing an existing plan. Use --auto to skip approval, --skip-test to skip tests.
+  name: /ck:code
+  path: code.md
+  power_level: 3
+- argument_hint: ''
+  category: core
+  description: ''
+  name: /ck:coding-level
+  path: coding-level.md
+  power_level: 0
+- argument_hint:
+  - issues
+  category: content
+  description: Analyze the current content and optimize for conversion
+  name: /ck:content:cro
+  path: content/cro.md
+  power_level: 0
+- argument_hint:
+  - user-request|issues
+  category: content
+  description: Smart content router — auto-detects quick/research/enhance mode
+  name: /ck:content
+  path: content.md
+  power_level: 1
+- argument_hint:
+  - tasks
+  category: cook
+  description: Multi — plan parallel phases & execute with fullstack-developer agents
+  name: /ck:cook:multi
+  path: cook/multi.md
+  power_level: 3
+- argument_hint:
+  - tasks
+  category: core
+  description: Implement a feature [step by step]. Use --auto to skip approvals.
+  name: /ck:cook
+  path: cook.md
+  power_level: 3
+- argument_hint:
+  - issues
+  category: core
+  description: Debugging technical issues and providing solutions.
+  name: /ck:debug
+  path: debug.md
+  power_level: 2
+- argument_hint:
+  - tasks
+  category: design
+  description: Create immersive interactive 3D designs with Three.js
+  name: /ck:design:3d
+  path: design/3d.md
+  power_level: 0
+- argument_hint:
+  - tasks
+  category: design
+  description: Immersive design — research-backed, award-winning quality
+  name: /ck:design:immersive
+  path: design/immersive.md
+  power_level: 2
+- argument_hint:
+  - tasks|screenshot-path|video-path
+  category: design
+  description: Smart design router — auto-detects screenshot/video/text input
+  name: /ck:design
+  path: design.md
+  power_level: 2
+- argument_hint: ''
+  category: docs
+  description: Analyze the codebase and create initial documentation
+  name: /ck:docs:init
+  path: docs/init.md
+  power_level: 4
+- argument_hint: ''
+  category: docs
+  description: ''
+  name: /ck:docs:summarize
+  path: docs/summarize.md
+  power_level: 0
+- argument_hint: ''
+  category: docs
+  description: Analyze the codebase and update documentation
+  name: /ck:docs:update
+  path: docs/update.md
+  power_level: 3
+- argument_hint:
+  - issues
+  category: fix
+  description: Deep fix — plan and fix complex/architectural issues
+  name: /ck:fix:deep
+  path: fix/deep.md
+  power_level: 3
+- argument_hint:
+  - issues
+  category: fix
+  description: Multi — fix multiple issues in parallel with fullstack-developer agents
+  name: /ck:fix:multi
+  path: fix/multi.md
+  power_level: 2
+- argument_hint:
+  - issues
+  category: core
+  description: Smart fix router — auto-detects issue type (types, UI, CI, tests, logs)
+  name: /ck:fix
+  path: fix.md
+  power_level: 2
+- argument_hint: ''
+  category: git
+  description: Stage all files and create a commit.
+  name: /ck:git:cm
+  path: git/cm.md
+  power_level: 0
+- argument_hint: ''
+  category: git
+  description: Stage, commit and push all code in the current branch
+  name: /ck:git:cp
+  path: git/cp.md
+  power_level: 0
+- argument_hint: ''
+  category: git
+  description: ''
+  name: /ck:git:merge
+  path: git/merge.md
+  power_level: 0
+- argument_hint: ''
+  category: git
+  description: ''
+  name: /ck:git:pr
+  path: git/pr.md
+  power_level: 0
+- argument_hint:
+  - tasks
+  category: integrate
+  description: Implement payment integration with Polar.sh
+  name: /ck:integrate:polar
+  path: integrate/polar.md
+  power_level: 2
+- argument_hint:
+  - tasks
+  category: integrate
+  description: Implement payment integration with SePay.vn
+  name: /ck:integrate:sepay
+  path: integrate/sepay.md
+  power_level: 2
+- argument_hint: ''
+  category: core
+  description: Write some journal entries.
+  name: /ck:journal
+  path: journal.md
+  power_level: 1
+- argument_hint: ''
+  category: core
+  description: ''
+  name: /ck:kanban
+  path: kanban.md
+  power_level: 0
+- argument_hint: ''
+  category: memory
+  description: Clear memories by scope
+  name: /ck:memory:clear
+  path: memory/clear.md
+  power_level: 0
+- argument_hint: ''
+  category: memory
+  description: List stored memories across all scopes
+  name: /ck:memory:list
+  path: memory/list.md
+  power_level: 0
+- argument_hint: ''
+  category: plan
+  description: ''
+  name: /ck:plan:archive
+  path: plan/archive.md
+  power_level: 0
+- argument_hint:
+  - task
+  category: plan
+  description: Deep plan — research, validate, and create an implementation plan
+  name: /ck:plan:deep
+  path: plan/deep.md
+  power_level: 3
+- argument_hint:
+  - task
+  category: plan
+  description: Fast plan — no research, only codebase analysis and planning
+  name: /ck:plan:fast
+  path: plan/fast.md
+  power_level: 2
+- argument_hint:
+  - task
+  category: plan
+  description: Multi — create detailed plan with parallel-executable phases
+  name: /ck:plan:multi
+  path: plan/multi.md
+  power_level: 3
+- argument_hint:
+  - task
+  category: plan
+  description: Research & create an implementation plan with 2 approaches
+  name: /ck:plan:two
+  path: plan/two.md
+  power_level: 4
+- argument_hint:
+  - task
+  category: core
+  description: Intelligent plan creation with complexity-based routing
+  name: /ck:plan
+  path: plan.md
+  power_level: 3
+- argument_hint: ''
+  category: pr
+  description: Resume session linked to a pull request
+  name: /ck:pr:resume
+  path: pr/resume.md
+  power_level: 0
+- argument_hint: ''
+  category: core
+  description: Path to markdown file, plan directory, or plans collection
+  name: /ck:preview
+  path: preview.md
+  power_level: 0
+- argument_hint:
+  - tasks-or-prompt
+  category: review
+  description: Scan & analyze the codebase.
+  name: /ck:review:codebase
+  path: review/codebase.md
+  power_level: 3
+- argument_hint: ''
+  category: scout
+  description: ''
+  name: /ck:scout:ext
+  path: scout/ext.md
+  power_level: 0
+- argument_hint: ''
+  category: core
+  description: ''
+  name: /ck:scout
+  path: scout.md
+  power_level: 0
+- argument_hint: ''
+  category: skill
+  description: ''
+  name: /ck:skill:add
+  path: skill/add.md
+  power_level: 0
+- argument_hint:
+  - prompt-or-llms-or-github-url
+  category: skill
+  description: Create a new agent skill
+  name: /ck:skill:create
+  path: skill/create.md
+  power_level: 0
+- argument_hint:
+  - prompt-or-path-to-skill
+  category: skill
+  description: Fix the agent skill based on `logs.txt` file.
+  name: /ck:skill:fix-logs
+  path: skill/fix-logs.md
+  power_level: 0
+- argument_hint: ''
+  category: skill
+  description: ''
+  name: /ck:skill:optimize:auto
+  path: skill/optimize/auto.md
+  power_level: 0
+- argument_hint: ''
+  category: skill
+  description: ''
+  name: /ck:skill:optimize
+  path: skill/optimize.md
+  power_level: 0
+- argument_hint: ''
+  category: skill
+  description: ''
+  name: /ck:skill:plan
+  path: skill/plan.md
+  power_level: 0
+- argument_hint: ''
+  category: test
+  description: ''
+  name: /ck:test:ui
+  path: test/ui.md
+  power_level: 0
+- argument_hint: ''
+  category: core
+  description: Run tests locally and analyze the summary report.
+  name: /ck:test
+  path: test.md
+  power_level: 1
+- argument_hint:
+  - task
+  category: core
+  description: Utilize tools of Model Context Protocol (MCP) servers
+  name: /ck:use-mcp
+  path: use-mcp.md
+  power_level: 0
+- argument_hint: ''
+  category: core
+  description: Review recent changes and wrap up the work
+  name: /ck:watzup
+  path: watzup.md
+  power_level: 1
+- argument_hint: ''
+  category: core
+  description: ''
+  name: /ck:worktree
+  path: worktree.md
+  power_level: 0
