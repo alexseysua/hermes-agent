@@ -1040,18 +1040,12 @@ from tools.registry import registry, tool_error
 
 TTS_SCHEMA = {
     "name": "text_to_speech",
-    "description": "Convert text to speech audio. Returns a MEDIA: path that the platform delivers as a voice message. On Telegram it plays as a voice bubble, on Discord/WhatsApp as an audio attachment. In CLI mode, saves to ~/voice-memos/. Voice and provider are user-configured, not model-selected.",
+    "description": "Text → speech. Returns MEDIA: path (voice message on messaging platforms).",
     "parameters": {
         "type": "object",
         "properties": {
-            "text": {
-                "type": "string",
-                "description": "The text to convert to speech. Keep under 4000 characters."
-            },
-            "output_path": {
-                "type": "string",
-                "description": "Optional custom file path to save the audio. Defaults to ~/.hermes/audio_cache/<timestamp>.mp3"
-            }
+            "text": {"type": "string", "description": "Text (<4000 chars)"},
+            "output_path": {"type": "string", "description": "Optional output path"}
         },
         "required": ["text"]
     }

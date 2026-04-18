@@ -50,29 +50,22 @@ def _error(message: str) -> dict:
 
 SEND_MESSAGE_SCHEMA = {
     "name": "send_message",
-    "description": (
-        "Send a message to a connected messaging platform, or list available targets.\n\n"
-        "IMPORTANT: When the user asks to send to a specific channel or person "
-        "(not just a bare platform name), call send_message(action='list') FIRST to see "
-        "available targets, then send to the correct one.\n"
-        "If the user just says a platform name like 'send to telegram', send directly "
-        "to the home channel without listing first."
-    ),
+    "description": "Send to messaging platform. action=list for targets. For specific channel — list first.",
     "parameters": {
         "type": "object",
         "properties": {
             "action": {
                 "type": "string",
                 "enum": ["send", "list"],
-                "description": "Action to perform. 'send' (default) sends a message. 'list' returns all available channels/contacts across connected platforms."
+                "description": "send (default) or list"
             },
             "target": {
                 "type": "string",
-                "description": "Delivery target. Format: 'platform' (uses home channel), 'platform:#channel-name', 'platform:chat_id', or 'platform:chat_id:thread_id' for Telegram topics and Discord threads. Examples: 'telegram', 'telegram:-1001234567890:17585', 'discord:999888777:555444333', 'discord:#bot-home', 'slack:#engineering', 'signal:+155****4567'"
+                "description": "'platform' | 'platform:#channel' | 'platform:chat_id[:thread_id]'"
             },
             "message": {
                 "type": "string",
-                "description": "The message text to send"
+                "description": "Message text"
             }
         },
         "required": []

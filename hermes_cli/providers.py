@@ -141,6 +141,13 @@ HERMES_OVERLAYS: Dict[str, HermesOverlay] = {
         base_url_override="https://api.arcee.ai/api/v1",
         base_url_env_var="ARCEE_BASE_URL",
     ),
+    "9router": HermesOverlay(
+        transport="openai_chat",
+        is_aggregator=True,
+        extra_env_vars=("NINEROUTER_API_KEY", "NINE_ROUTER_API_KEY"),
+        base_url_override="http://localhost:20128/v1",
+        base_url_env_var="NINEROUTER_BASE_URL",
+    ),
 }
 
 
@@ -240,6 +247,13 @@ ALIASES: Dict[str, str] = {
     "arcee-ai": "arcee",
     "arceeai": "arcee",
 
+    # 9router
+    "nine-router": "9router",
+    "nine_router": "9router",
+    "9-router": "9router",
+    "9_router": "9router",
+    "nrouter": "9router",
+
     # Local server aliases → virtual "local" concept (resolved via user config)
     "lmstudio": "lmstudio",
     "lm-studio": "lmstudio",
@@ -262,6 +276,7 @@ _LABEL_OVERRIDES: Dict[str, str] = {
     "copilot-acp": "GitHub Copilot ACP",
     "xiaomi": "Xiaomi MiMo",
     "local": "Local endpoint",
+    "9router": "9Router",
 }
 
 

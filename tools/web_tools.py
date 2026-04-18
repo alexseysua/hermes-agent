@@ -2046,14 +2046,11 @@ from tools.registry import registry, tool_error
 
 WEB_SEARCH_SCHEMA = {
     "name": "web_search",
-    "description": "Search the web for information on any topic. Returns up to 5 relevant results with titles, URLs, and descriptions.",
+    "description": "Web search. Returns up to 5 results.",
     "parameters": {
         "type": "object",
         "properties": {
-            "query": {
-                "type": "string",
-                "description": "The search query to look up on the web"
-            }
+            "query": {"type": "string", "description": "Search query"}
         },
         "required": ["query"]
     }
@@ -2061,14 +2058,14 @@ WEB_SEARCH_SCHEMA = {
 
 WEB_EXTRACT_SCHEMA = {
     "name": "web_extract",
-    "description": "Extract content from web page URLs. Returns page content in markdown format. Also works with PDF URLs (arxiv papers, documents, etc.) — pass the PDF link directly and it converts to markdown text. Pages under 5000 chars return full markdown; larger pages are LLM-summarized and capped at ~5000 chars per page. Pages over 2M chars are refused. If a URL fails or times out, use the browser tool to access it instead.",
+    "description": "Extract URL content as markdown (PDFs supported). Large pages summarized.",
     "parameters": {
         "type": "object",
         "properties": {
             "urls": {
                 "type": "array",
                 "items": {"type": "string"},
-                "description": "List of URLs to extract content from (max 5 URLs per call)",
+                "description": "URLs (max 5)",
                 "maxItems": 5
             }
         },
