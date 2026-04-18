@@ -625,146 +625,101 @@ atexit.register(_stop_browser_cleanup_thread)
 BROWSER_TOOL_SCHEMAS = [
     {
         "name": "browser_navigate",
-        "description": "Navigate to a URL in the browser. Initializes the session and loads the page. Must be called before other browser tools. For simple information retrieval, prefer web_search or web_extract (faster, cheaper). Use browser tools when you need to interact with a page (click, fill forms, dynamic content). Returns a compact page snapshot with interactive elements and ref IDs — no need to call browser_snapshot separately after navigating.",
+        "description": "Open URL. Returns compact snapshot with ref IDs. Prefer web_search/web_extract for static read.",
         "parameters": {
             "type": "object",
             "properties": {
-                "url": {
-                    "type": "string",
-                    "description": "The URL to navigate to (e.g., 'https://example.com')"
-                }
+                "url": {"type": "string", "description": "URL"}
             },
             "required": ["url"]
         }
     },
     {
         "name": "browser_snapshot",
-        "description": "Get a text-based snapshot of the current page's accessibility tree. Returns interactive elements with ref IDs (like @e1, @e2) for browser_click and browser_type. full=false (default): compact view with interactive elements. full=true: complete page content. Snapshots over 8000 chars are truncated or LLM-summarized. Requires browser_navigate first. Note: browser_navigate already returns a compact snapshot — use this to refresh after interactions that change the page, or with full=true for complete content.",
+        "description": "Refresh page snapshot. full=true for complete content.",
         "parameters": {
             "type": "object",
             "properties": {
-                "full": {
-                    "type": "boolean",
-                    "description": "If true, returns complete page content. If false (default), returns compact view with interactive elements only.",
-                    "default": False
-                }
+                "full": {"type": "boolean", "description": "Full page content", "default": False}
             },
             "required": []
         }
     },
     {
         "name": "browser_click",
-        "description": "Click on an element identified by its ref ID from the snapshot (e.g., '@e5'). The ref IDs are shown in square brackets in the snapshot output. Requires browser_navigate and browser_snapshot to be called first.",
+        "description": "Click element by ref ID (e.g. @e5).",
         "parameters": {
             "type": "object",
             "properties": {
-                "ref": {
-                    "type": "string",
-                    "description": "The element reference from the snapshot (e.g., '@e5', '@e12')"
-                }
+                "ref": {"type": "string", "description": "Ref ID"}
             },
             "required": ["ref"]
         }
     },
     {
         "name": "browser_type",
-        "description": "Type text into an input field identified by its ref ID. Clears the field first, then types the new text. Requires browser_navigate and browser_snapshot to be called first.",
+        "description": "Clear input then type text.",
         "parameters": {
             "type": "object",
             "properties": {
-                "ref": {
-                    "type": "string",
-                    "description": "The element reference from the snapshot (e.g., '@e3')"
-                },
-                "text": {
-                    "type": "string",
-                    "description": "The text to type into the field"
-                }
+                "ref": {"type": "string", "description": "Ref ID"},
+                "text": {"type": "string", "description": "Text"}
             },
             "required": ["ref", "text"]
         }
     },
     {
         "name": "browser_scroll",
-        "description": "Scroll the page in a direction. Use this to reveal more content that may be below or above the current viewport. Requires browser_navigate to be called first.",
+        "description": "Scroll page up/down.",
         "parameters": {
             "type": "object",
             "properties": {
-                "direction": {
-                    "type": "string",
-                    "enum": ["up", "down"],
-                    "description": "Direction to scroll"
-                }
+                "direction": {"type": "string", "enum": ["up", "down"], "description": "Direction"}
             },
             "required": ["direction"]
         }
     },
     {
         "name": "browser_back",
-        "description": "Navigate back to the previous page in browser history. Requires browser_navigate to be called first.",
-        "parameters": {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
+        "description": "Navigate back in history.",
+        "parameters": {"type": "object", "properties": {}, "required": []}
     },
     {
         "name": "browser_press",
-        "description": "Press a keyboard key. Useful for submitting forms (Enter), navigating (Tab), or keyboard shortcuts. Requires browser_navigate to be called first.",
+        "description": "Press keyboard key (Enter/Tab/Escape/Arrow*).",
         "parameters": {
             "type": "object",
             "properties": {
-                "key": {
-                    "type": "string",
-                    "description": "Key to press (e.g., 'Enter', 'Tab', 'Escape', 'ArrowDown')"
-                }
+                "key": {"type": "string", "description": "Key"}
             },
             "required": ["key"]
         }
     },
     {
         "name": "browser_get_images",
-        "description": "Get a list of all images on the current page with their URLs and alt text. Useful for finding images to analyze with the vision tool. Requires browser_navigate to be called first.",
-        "parameters": {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
+        "description": "List images on page (url + alt).",
+        "parameters": {"type": "object", "properties": {}, "required": []}
     },
     {
         "name": "browser_vision",
-        "description": "Take a screenshot of the current page and analyze it with vision AI. Use this when you need to visually understand what's on the page - especially useful for CAPTCHAs, visual verification challenges, complex layouts, or when the text snapshot doesn't capture important visual information. Returns both the AI analysis and a screenshot_path that you can share with the user by including MEDIA:<screenshot_path> in your response. Requires browser_navigate to be called first.",
+        "description": "Screenshot + vision AI analysis. Use for CAPTCHAs, visual layouts.",
         "parameters": {
             "type": "object",
             "properties": {
-                "question": {
-                    "type": "string",
-                    "description": "What you want to know about the page visually. Be specific about what you're looking for."
-                },
-                "annotate": {
-                    "type": "boolean",
-                    "default": False,
-                    "description": "If true, overlay numbered [N] labels on interactive elements. Each [N] maps to ref @eN for subsequent browser commands. Useful for QA and spatial reasoning about page layout."
-                }
+                "question": {"type": "string", "description": "What to look for"},
+                "annotate": {"type": "boolean", "default": False, "description": "Overlay [N] labels → @eN refs"}
             },
             "required": ["question"]
         }
     },
     {
         "name": "browser_console",
-        "description": "Get browser console output and JavaScript errors from the current page. Returns console.log/warn/error/info messages and uncaught JS exceptions. Use this to detect silent JavaScript errors, failed API calls, and application warnings. Requires browser_navigate to be called first. When 'expression' is provided, evaluates JavaScript in the page context and returns the result — use this for DOM inspection, reading page state, or extracting data programmatically.",
+        "description": "Read console logs/errors. With expression: eval JS in page context.",
         "parameters": {
             "type": "object",
             "properties": {
-                "clear": {
-                    "type": "boolean",
-                    "default": False,
-                    "description": "If true, clear the message buffers after reading"
-                },
-                "expression": {
-                    "type": "string",
-                    "description": "JavaScript expression to evaluate in the page context. Runs in the browser like DevTools console — full access to DOM, window, document. Return values are serialized to JSON. Example: 'document.title' or 'document.querySelectorAll(\"a\").length'"
-                }
+                "clear": {"type": "boolean", "default": False, "description": "Clear buffer after read"},
+                "expression": {"type": "string", "description": "JS to eval"}
             },
             "required": []
         }

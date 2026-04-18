@@ -702,13 +702,13 @@ def _check_file_reqs():
 
 READ_FILE_SCHEMA = {
     "name": "read_file",
-    "description": "Read a text file with line numbers and pagination. Use this instead of cat/head/tail in terminal. Output format: 'LINE_NUM|CONTENT'. Suggests similar filenames if not found. Use offset and limit for large files. Reads exceeding ~100K characters are rejected; use offset and limit to read specific sections of large files. NOTE: Cannot read images or binary files — use vision_analyze for images.",
+    "description": "Read text file with line numbers. Use offset+limit for big files. Not for binaries/images.",
     "parameters": {
         "type": "object",
         "properties": {
-            "path": {"type": "string", "description": "Path to the file to read (absolute, relative, or ~/path)"},
-            "offset": {"type": "integer", "description": "Line number to start reading from (1-indexed, default: 1)", "default": 1, "minimum": 1},
-            "limit": {"type": "integer", "description": "Maximum number of lines to read (default: 500, max: 2000)", "default": 500, "maximum": 2000}
+            "path": {"type": "string", "description": "File path"},
+            "offset": {"type": "integer", "description": "Start line (1-indexed)", "default": 1, "minimum": 1},
+            "limit": {"type": "integer", "description": "Max lines (default 500, max 2000)", "default": 500, "maximum": 2000}
         },
         "required": ["path"]
     }
@@ -716,12 +716,12 @@ READ_FILE_SCHEMA = {
 
 WRITE_FILE_SCHEMA = {
     "name": "write_file",
-    "description": "Write content to a file, completely replacing existing content. Use this instead of echo/cat heredoc in terminal. Creates parent directories automatically. OVERWRITES the entire file — use 'patch' for targeted edits.",
+    "description": "Overwrite file with new content. Use `patch` for targeted edits.",
     "parameters": {
         "type": "object",
         "properties": {
-            "path": {"type": "string", "description": "Path to the file to write (will be created if it doesn't exist, overwritten if it does)"},
-            "content": {"type": "string", "description": "Complete content to write to the file"}
+            "path": {"type": "string", "description": "File path"},
+            "content": {"type": "string", "description": "Full content"}
         },
         "required": ["path", "content"]
     }
@@ -729,16 +729,16 @@ WRITE_FILE_SCHEMA = {
 
 PATCH_SCHEMA = {
     "name": "patch",
-    "description": "Targeted find-and-replace edits in files. Use this instead of sed/awk in terminal. Uses fuzzy matching (9 strategies) so minor whitespace/indentation differences won't break it. Returns a unified diff. Auto-runs syntax checks after editing.\n\nReplace mode (default): find a unique string and replace it.\nPatch mode: apply V4A multi-file patches for bulk changes.",
+    "description": "Edit file via find-and-replace (mode=replace) or V4A patch (mode=patch). Fuzzy matching.",
     "parameters": {
         "type": "object",
         "properties": {
-            "mode": {"type": "string", "enum": ["replace", "patch"], "description": "Edit mode: 'replace' for targeted find-and-replace, 'patch' for V4A multi-file patches", "default": "replace"},
-            "path": {"type": "string", "description": "File path to edit (required for 'replace' mode)"},
-            "old_string": {"type": "string", "description": "Text to find in the file (required for 'replace' mode). Must be unique in the file unless replace_all=true. Include enough surrounding context to ensure uniqueness."},
-            "new_string": {"type": "string", "description": "Replacement text (required for 'replace' mode). Can be empty string to delete the matched text."},
-            "replace_all": {"type": "boolean", "description": "Replace all occurrences instead of requiring a unique match (default: false)", "default": False},
-            "patch": {"type": "string", "description": "V4A format patch content (required for 'patch' mode). Format:\n*** Begin Patch\n*** Update File: path/to/file\n@@ context hint @@\n context line\n-removed line\n+added line\n*** End Patch"}
+            "mode": {"type": "string", "enum": ["replace", "patch"], "description": "replace or patch", "default": "replace"},
+            "path": {"type": "string", "description": "File path (replace mode)"},
+            "old_string": {"type": "string", "description": "Text to find — must be unique unless replace_all=true"},
+            "new_string": {"type": "string", "description": "Replacement (empty = delete)"},
+            "replace_all": {"type": "boolean", "description": "Replace all occurrences", "default": False},
+            "patch": {"type": "string", "description": "V4A patch body (patch mode)"}
         },
         "required": ["mode"]
     }
@@ -746,18 +746,18 @@ PATCH_SCHEMA = {
 
 SEARCH_FILES_SCHEMA = {
     "name": "search_files",
-    "description": "Search file contents or find files by name. Use this instead of grep/rg/find/ls in terminal. Ripgrep-backed, faster than shell equivalents.\n\nContent search (target='content'): Regex search inside files. Output modes: full matches with line numbers, file paths only, or match counts.\n\nFile search (target='files'): Find files by glob pattern (e.g., '*.py', '*config*'). Also use this instead of ls — results sorted by modification time.",
+    "description": "Ripgrep search. target=content (regex in file body) or target=files (glob by name).",
     "parameters": {
         "type": "object",
         "properties": {
-            "pattern": {"type": "string", "description": "Regex pattern for content search, or glob pattern (e.g., '*.py') for file search"},
-            "target": {"type": "string", "enum": ["content", "files"], "description": "'content' searches inside file contents, 'files' searches for files by name", "default": "content"},
-            "path": {"type": "string", "description": "Directory or file to search in (default: current working directory)", "default": "."},
-            "file_glob": {"type": "string", "description": "Filter files by pattern in grep mode (e.g., '*.py' to only search Python files)"},
-            "limit": {"type": "integer", "description": "Maximum number of results to return (default: 50)", "default": 50},
-            "offset": {"type": "integer", "description": "Skip first N results for pagination (default: 0)", "default": 0},
-            "output_mode": {"type": "string", "enum": ["content", "files_only", "count"], "description": "Output format for grep mode: 'content' shows matching lines with line numbers, 'files_only' lists file paths, 'count' shows match counts per file", "default": "content"},
-            "context": {"type": "integer", "description": "Number of context lines before and after each match (grep mode only)", "default": 0}
+            "pattern": {"type": "string", "description": "Regex or glob"},
+            "target": {"type": "string", "enum": ["content", "files"], "description": "content or files", "default": "content"},
+            "path": {"type": "string", "description": "Dir/file (default cwd)", "default": "."},
+            "file_glob": {"type": "string", "description": "File filter in content mode"},
+            "limit": {"type": "integer", "description": "Max results (50)", "default": 50},
+            "offset": {"type": "integer", "description": "Skip N", "default": 0},
+            "output_mode": {"type": "string", "enum": ["content", "files_only", "count"], "description": "Output shape", "default": "content"},
+            "context": {"type": "integer", "description": "Context lines", "default": 0}
         },
         "required": ["pattern"]
     }

@@ -646,18 +646,15 @@ from tools.registry import registry, tool_error
 
 IMAGE_GENERATE_SCHEMA = {
     "name": "image_generate",
-    "description": "Generate high-quality images from text prompts using FLUX 2 Pro model with automatic 2x upscaling. Creates detailed, artistic images that are automatically upscaled for hi-rez results. Returns a single upscaled image URL. Display it using markdown: ![description](URL)",
+    "description": "FLUX 2 Pro text-to-image with 2x upscale. Returns image URL (render as ![alt](URL)).",
     "parameters": {
         "type": "object",
         "properties": {
-            "prompt": {
-                "type": "string",
-                "description": "The text prompt describing the desired image. Be detailed and descriptive."
-            },
+            "prompt": {"type": "string", "description": "Detailed prompt"},
             "aspect_ratio": {
                 "type": "string",
                 "enum": ["landscape", "square", "portrait"],
-                "description": "The aspect ratio of the generated image. 'landscape' is 16:9 wide, 'portrait' is 16:9 tall, 'square' is 1:1.",
+                "description": "landscape=16:9, portrait=9:16, square=1:1",
                 "default": "landscape"
             }
         },

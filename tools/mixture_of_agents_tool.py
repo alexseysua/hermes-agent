@@ -514,14 +514,11 @@ from tools.registry import registry
 
 MOA_SCHEMA = {
     "name": "mixture_of_agents",
-    "description": "Route a hard problem through multiple frontier LLMs collaboratively. Makes 5 API calls (4 reference models + 1 aggregator) with maximum reasoning effort — use sparingly for genuinely difficult problems. Best for: complex math, advanced algorithms, multi-step analytical reasoning, problems benefiting from diverse perspectives.",
+    "description": "Query 4 frontier LLMs + aggregator (5 calls). Use sparingly for hard reasoning problems.",
     "parameters": {
         "type": "object",
         "properties": {
-            "user_prompt": {
-                "type": "string",
-                "description": "The complex query or problem to solve using multiple AI models. Should be a challenging problem that benefits from diverse perspectives and collaborative reasoning."
-            }
+            "user_prompt": {"type": "string", "description": "Complex problem"}
         },
         "required": ["user_prompt"]
     }

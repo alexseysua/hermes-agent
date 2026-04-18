@@ -749,18 +749,12 @@ from tools.registry import registry, tool_error
 
 VISION_ANALYZE_SCHEMA = {
     "name": "vision_analyze",
-    "description": "Analyze images using AI vision. Provides a comprehensive description and answers a specific question about the image content.",
+    "description": "Analyze image and answer question about it.",
     "parameters": {
         "type": "object",
         "properties": {
-            "image_url": {
-                "type": "string",
-                "description": "Image URL (http/https) or local file path to analyze."
-            },
-            "question": {
-                "type": "string",
-                "description": "Your specific question or request about the image to resolve. The AI will automatically provide a complete image description AND answer your specific question."
-            }
+            "image_url": {"type": "string", "description": "URL or local path"},
+            "question": {"type": "string", "description": "What to look for"}
         },
         "required": ["image_url", "question"]
     }

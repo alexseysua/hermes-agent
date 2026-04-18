@@ -385,27 +385,13 @@ def cronjob(
 
 CRONJOB_SCHEMA = {
     "name": "cronjob",
-    "description": """Manage scheduled cron jobs with a single compressed tool.
-
-Use action='create' to schedule a new job from a prompt or one or more skills.
-Use action='list' to inspect jobs.
-Use action='update', 'pause', 'resume', 'remove', or 'run' to manage an existing job.
-
-Jobs run in a fresh session with no current-chat context, so prompts must be self-contained.
-If skills are provided on create, the future cron run loads those skills in order, then follows the prompt as the task instruction.
-On update, passing skills=[] clears attached skills.
-
-NOTE: The agent's final response is auto-delivered to the target. Put the primary
-user-facing content in the final response. Cron jobs run autonomously with no user
-present — they cannot ask questions or request clarification.
-
-Important safety rule: cron-run sessions should not recursively schedule more cron jobs.""",
+    "description": "Schedule/manage cron jobs. Jobs run in fresh session (self-contained prompt required). skills=[] on update clears. No recursive scheduling.",
     "parameters": {
         "type": "object",
         "properties": {
             "action": {
                 "type": "string",
-                "description": "One of: create, list, update, pause, resume, remove, run"
+                "description": "create|list|update|pause|resume|remove|run"
             },
             "job_id": {
                 "type": "string",
@@ -413,47 +399,47 @@ Important safety rule: cron-run sessions should not recursively schedule more cr
             },
             "prompt": {
                 "type": "string",
-                "description": "For create: the full self-contained prompt. If skills are also provided, this becomes the task instruction paired with those skills."
+                "description": "Self-contained prompt (create)"
             },
             "schedule": {
                 "type": "string",
-                "description": "For create/update: '30m', 'every 2h', '0 9 * * *', or ISO timestamp"
+                "description": "'30m', 'every 2h', cron, or ISO timestamp"
             },
             "name": {
                 "type": "string",
-                "description": "Optional human-friendly name"
+                "description": "Optional name"
             },
             "repeat": {
                 "type": "integer",
-                "description": "Optional repeat count. Omit for defaults (once for one-shot, forever for recurring)."
+                "description": "Repeat count (default: once one-shot, forever recurring)"
             },
             "deliver": {
                 "type": "string",
-                "description": "Omit this parameter to auto-deliver back to the current chat and topic (recommended). Auto-detection preserves thread/topic context. Only set explicitly when the user asks to deliver somewhere OTHER than the current conversation. Values: 'origin' (same as omitting), 'local' (no delivery, save only), or platform:chat_id:thread_id for a specific destination. Examples: 'telegram:-1001234567890:17585', 'discord:#engineering', 'sms:+15551234567'. WARNING: 'platform:chat_id' without :thread_id loses topic targeting."
+                "description": "Omit for auto-deliver to current chat. Or 'origin'/'local'/'platform:chat_id:thread_id'"
             },
             "skills": {
                 "type": "array",
                 "items": {"type": "string"},
-                "description": "Optional ordered list of skill names to load before executing the cron prompt. On update, pass an empty array to clear attached skills."
+                "description": "Ordered skill names to load (empty array clears)"
             },
             "model": {
                 "type": "object",
-                "description": "Optional per-job model override. If provider is omitted, the current main provider is pinned at creation time so the job stays stable.",
+                "description": "Per-job model override",
                 "properties": {
                     "provider": {
                         "type": "string",
-                        "description": "Provider name (e.g. 'openrouter', 'anthropic'). Omit to use and pin the current provider."
+                        "description": "Provider (omit to pin current)"
                     },
                     "model": {
                         "type": "string",
-                        "description": "Model name (e.g. 'anthropic/claude-sonnet-4', 'claude-sonnet-4')"
+                        "description": "Model name"
                     }
                 },
                 "required": ["model"]
             },
             "script": {
                 "type": "string",
-                "description": "Optional path to a Python script that runs before each cron job execution. Its stdout is injected into the prompt as context. Use for data collection and change detection. Relative paths resolve under ~/.hermes/scripts/. On update, pass empty string to clear."
+                "description": "Python script path; stdout injected as context. Empty string clears."
             },
         },
         "required": ["action"]

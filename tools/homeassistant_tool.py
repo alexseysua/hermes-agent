@@ -352,29 +352,12 @@ def _check_ha_available() -> bool:
 
 HA_LIST_ENTITIES_SCHEMA = {
     "name": "ha_list_entities",
-    "description": (
-        "List Home Assistant entities. Optionally filter by domain "
-        "(light, switch, climate, sensor, binary_sensor, cover, fan, etc.) "
-        "or by area name (living room, kitchen, bedroom, etc.)."
-    ),
+    "description": "List Home Assistant entities. Filter by domain or area.",
     "parameters": {
         "type": "object",
         "properties": {
-            "domain": {
-                "type": "string",
-                "description": (
-                    "Entity domain to filter by (e.g. 'light', 'switch', 'climate', "
-                    "'sensor', 'binary_sensor', 'cover', 'fan', 'media_player'). "
-                    "Omit to list all entities."
-                ),
-            },
-            "area": {
-                "type": "string",
-                "description": (
-                    "Area/room name to filter by (e.g. 'living room', 'kitchen'). "
-                    "Matches against entity friendly names. Omit to list all."
-                ),
-            },
+            "domain": {"type": "string", "description": "e.g. light, switch, climate, sensor"},
+            "area": {"type": "string", "description": "Room/area name"},
         },
         "required": [],
     },
@@ -382,20 +365,11 @@ HA_LIST_ENTITIES_SCHEMA = {
 
 HA_GET_STATE_SCHEMA = {
     "name": "ha_get_state",
-    "description": (
-        "Get the detailed state of a single Home Assistant entity, including all "
-        "attributes (brightness, color, temperature setpoint, sensor readings, etc.)."
-    ),
+    "description": "Get detailed state + attributes of an HA entity.",
     "parameters": {
         "type": "object",
         "properties": {
-            "entity_id": {
-                "type": "string",
-                "description": (
-                    "The entity ID to query (e.g. 'light.living_room', "
-                    "'climate.thermostat', 'sensor.temperature')."
-                ),
-            },
+            "entity_id": {"type": "string", "description": "e.g. light.living_room"},
         },
         "required": ["entity_id"],
     },
@@ -403,22 +377,11 @@ HA_GET_STATE_SCHEMA = {
 
 HA_LIST_SERVICES_SCHEMA = {
     "name": "ha_list_services",
-    "description": (
-        "List available Home Assistant services (actions) for device control. "
-        "Shows what actions can be performed on each device type and what "
-        "parameters they accept. Use this to discover how to control devices "
-        "found via ha_list_entities."
-    ),
+    "description": "List HA services (actions) for device control.",
     "parameters": {
         "type": "object",
         "properties": {
-            "domain": {
-                "type": "string",
-                "description": (
-                    "Filter by domain (e.g. 'light', 'climate', 'switch'). "
-                    "Omit to list services for all domains."
-                ),
-            },
+            "domain": {"type": "string", "description": "Filter by domain"},
         },
         "required": [],
     },
@@ -426,44 +389,14 @@ HA_LIST_SERVICES_SCHEMA = {
 
 HA_CALL_SERVICE_SCHEMA = {
     "name": "ha_call_service",
-    "description": (
-        "Call a Home Assistant service to control a device. Use ha_list_services "
-        "to discover available services and their parameters for each domain."
-    ),
+    "description": "Call HA service (use ha_list_services to discover).",
     "parameters": {
         "type": "object",
         "properties": {
-            "domain": {
-                "type": "string",
-                "description": (
-                    "Service domain (e.g. 'light', 'switch', 'climate', "
-                    "'cover', 'media_player', 'fan', 'scene', 'script')."
-                ),
-            },
-            "service": {
-                "type": "string",
-                "description": (
-                    "Service name (e.g. 'turn_on', 'turn_off', 'toggle', "
-                    "'set_temperature', 'set_hvac_mode', 'open_cover', "
-                    "'close_cover', 'set_volume_level')."
-                ),
-            },
-            "entity_id": {
-                "type": "string",
-                "description": (
-                    "Target entity ID (e.g. 'light.living_room'). "
-                    "Some services (like scene.turn_on) may not need this."
-                ),
-            },
-            "data": {
-                "type": "string",
-                "description": (
-                    "Additional service data as a JSON string. Examples: "
-                    '{"brightness": 255, "color_name": "blue"} for lights, '
-                    '{"temperature": 22, "hvac_mode": "heat"} for climate, '
-                    '{"volume_level": 0.5} for media players.'
-                ),
-            },
+            "domain": {"type": "string", "description": "e.g. light, climate, switch"},
+            "service": {"type": "string", "description": "e.g. turn_on, set_temperature"},
+            "entity_id": {"type": "string", "description": "Target (optional for scenes)"},
+            "data": {"type": "string", "description": "JSON data, e.g. {\"brightness\":255}"},
         },
         "required": ["domain", "service"],
     },

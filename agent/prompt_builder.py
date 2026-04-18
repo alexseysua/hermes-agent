@@ -142,32 +142,18 @@ DEFAULT_AGENT_IDENTITY = (
 )
 
 MEMORY_GUIDANCE = (
-    "You have persistent memory across sessions. Save durable facts using the memory "
-    "tool: user preferences, environment details, tool quirks, and stable conventions. "
-    "Memory is injected into every turn, so keep it compact and focused on facts that "
-    "will still matter later.\n"
-    "Prioritize what reduces future user steering — the most valuable memory is one "
-    "that prevents the user from having to correct or remind you again. "
-    "User preferences and recurring corrections matter more than procedural task details.\n"
-    "Do NOT save task progress, session outcomes, completed-work logs, or temporary TODO "
-    "state to memory; use session_search to recall those from past transcripts. "
-    "If you've discovered a new way to do something, solved a problem that could be "
-    "necessary later, save it as a skill with the skill tool."
+    "Persistent memory: save durable user preferences, env details, tool quirks via memory tool. "
+    "Skip task progress / session logs (use session_search). "
+    "Novel workflow? Save as skill via skill_manage."
 )
 
 SESSION_SEARCH_GUIDANCE = (
-    "When the user references something from a past conversation or you suspect "
-    "relevant cross-session context exists, use session_search to recall it before "
-    "asking them to repeat themselves."
+    "Use session_search when user references prior conversations."
 )
 
 SKILLS_GUIDANCE = (
-    "After completing a complex task (5+ tool calls), fixing a tricky error, "
-    "or discovering a non-trivial workflow, save the approach as a "
-    "skill with skill_manage so you can reuse it next time.\n"
-    "When using a skill and finding it outdated, incomplete, or wrong, "
-    "patch it immediately with skill_manage(action='patch') — don't wait to be asked. "
-    "Skills that aren't maintained become liabilities."
+    "After complex tasks (5+ calls) or non-trivial workflows: save via skill_manage. "
+    "Outdated skill? Patch immediately with skill_manage(action='patch')."
 )
 
 TOOL_USE_ENFORCEMENT_GUIDANCE = (
@@ -414,7 +400,13 @@ def build_environment_hints() -> str:
     return "\n\n".join(hints)
 
 
-CONTEXT_FILE_MAX_CHARS = 20_000
+# Per-file cap for AGENTS.md / CLAUDE.md / .cursorrules when embedded in the
+# system prompt.  Kept deliberately tight: Claude Code OAuth routes cap input
+# TPM per 5-minute window, and a 20k-char file alone eats enough of that budget
+# to trigger 400 "out of extra usage" on follow-up calls.  8k is plenty for the
+# "skim this to orient yourself" role these files play.  Override via the env
+# var HERMES_CONTEXT_FILE_MAX_CHARS if a project really needs more.
+CONTEXT_FILE_MAX_CHARS = int(os.getenv("HERMES_CONTEXT_FILE_MAX_CHARS", "8000"))
 CONTEXT_TRUNCATE_HEAD_RATIO = 0.7
 CONTEXT_TRUNCATE_TAIL_RATIO = 0.2
 
@@ -774,26 +766,13 @@ def build_skills_system_prompt(
 
         result = (
             "## Skills (mandatory)\n"
-            "Before replying, scan the skills below. If a skill matches or is even partially relevant "
-            "to your task, you MUST load it with skill_view(name) and follow its instructions. "
-            "Err on the side of loading — it is always better to have context you don't need "
-            "than to miss critical steps, pitfalls, or established workflows. "
-            "Skills contain specialized knowledge — API endpoints, tool-specific commands, "
-            "and proven workflows that outperform general-purpose approaches. Load the skill "
-            "even if you think you could handle the task with basic tools like web_search or terminal. "
-            "Skills also encode the user's preferred approach, conventions, and quality standards "
-            "for tasks like code review, planning, and testing — load them even for tasks you "
-            "already know how to do, because the skill defines how it should be done here.\n"
-            "If a skill has issues, fix it with skill_manage(action='patch').\n"
-            "After difficult/iterative tasks, offer to save as a skill. "
-            "If a skill you loaded was missing steps, had wrong commands, or needed "
-            "pitfalls you discovered, update it before finishing.\n"
+            "Scan skills below. If any is relevant — load via skill_view(name) before acting. "
+            "Skills encode user's preferred approach and conventions. Err toward loading.\n"
+            "Patch outdated skills via skill_manage(action='patch').\n"
             "\n"
             "<available_skills>\n"
             + "\n".join(index_lines) + "\n"
             "</available_skills>\n"
-            "\n"
-            "Only proceed without loading a skill if genuinely none are relevant to the task."
         )
 
     # ── Store in LRU cache ────────────────────────────────────────────

@@ -653,23 +653,9 @@ def skill_manage(
 SKILL_MANAGE_SCHEMA = {
     "name": "skill_manage",
     "description": (
-        "Manage skills (create, update, delete). Skills are your procedural "
-        "memory — reusable approaches for recurring task types. "
-        "New skills go to ~/.hermes/skills/; existing skills can be modified wherever they live.\n\n"
-        "Actions: create (full SKILL.md + optional category), "
-        "patch (old_string/new_string — preferred for fixes), "
-        "edit (full SKILL.md rewrite — major overhauls only), "
-        "delete, write_file, remove_file.\n\n"
-        "Create when: complex task succeeded (5+ calls), errors overcome, "
-        "user-corrected approach worked, non-trivial workflow discovered, "
-        "or user asks you to remember a procedure.\n"
-        "Update when: instructions stale/wrong, OS-specific failures, "
-        "missing steps or pitfalls found during use. "
-        "If you used a skill and hit issues not covered by it, patch it immediately.\n\n"
-        "After difficult/iterative tasks, offer to save as a skill. "
-        "Skip for simple one-offs. Confirm with user before creating/deleting.\n\n"
-        "Good skills: trigger conditions, numbered steps with exact commands, "
-        "pitfalls section, verification steps. Use skill_view() to see format examples."
+        "Create/update/delete skills (reusable procedural memory). "
+        "Use patch for fixes, edit for rewrites, create after 5+ call successes or user-corrected workflows. "
+        "Confirm create/delete with user."
     ),
     "parameters": {
         "type": "object",
@@ -677,62 +663,39 @@ SKILL_MANAGE_SCHEMA = {
             "action": {
                 "type": "string",
                 "enum": ["create", "patch", "edit", "delete", "write_file", "remove_file"],
-                "description": "The action to perform."
+                "description": "Action"
             },
             "name": {
                 "type": "string",
-                "description": (
-                    "Skill name (lowercase, hyphens/underscores, max 64 chars). "
-                    "Must match an existing skill for patch/edit/delete/write_file/remove_file."
-                )
+                "description": "Skill name (lowercase, hyphens, <=64)"
             },
             "content": {
                 "type": "string",
-                "description": (
-                    "Full SKILL.md content (YAML frontmatter + markdown body). "
-                    "Required for 'create' and 'edit'. For 'edit', read the skill "
-                    "first with skill_view() and provide the complete updated text."
-                )
+                "description": "Full SKILL.md (create/edit)"
             },
             "old_string": {
                 "type": "string",
-                "description": (
-                    "Text to find in the file (required for 'patch'). Must be unique "
-                    "unless replace_all=true. Include enough surrounding context to "
-                    "ensure uniqueness."
-                )
+                "description": "Unique text to replace (patch)"
             },
             "new_string": {
                 "type": "string",
-                "description": (
-                    "Replacement text (required for 'patch'). Can be empty string "
-                    "to delete the matched text."
-                )
+                "description": "Replacement (patch; empty = delete)"
             },
             "replace_all": {
                 "type": "boolean",
-                "description": "For 'patch': replace all occurrences instead of requiring a unique match (default: false)."
+                "description": "Replace all occurrences"
             },
             "category": {
                 "type": "string",
-                "description": (
-                    "Optional category/domain for organizing the skill (e.g., 'devops', "
-                    "'data-science', 'mlops'). Creates a subdirectory grouping. "
-                    "Only used with 'create'."
-                )
+                "description": "Category subdir (create)"
             },
             "file_path": {
                 "type": "string",
-                "description": (
-                    "Path to a supporting file within the skill directory. "
-                    "For 'write_file'/'remove_file': required, must be under references/, "
-                    "templates/, scripts/, or assets/. "
-                    "For 'patch': optional, defaults to SKILL.md if omitted."
-                )
+                "description": "Sub-file under references/templates/scripts/assets"
             },
             "file_content": {
                 "type": "string",
-                "description": "Content for the file. Required for 'write_file'."
+                "description": "File content (write_file)"
             },
         },
         "required": ["action", "name"],

@@ -1090,41 +1090,35 @@ from tools.registry import registry, tool_error
 
 PROCESS_SCHEMA = {
     "name": "process",
-    "description": (
-        "Manage background processes started with terminal(background=true). "
-        "Actions: 'list' (show all), 'poll' (check status + new output), "
-        "'log' (full output with pagination), 'wait' (block until done or timeout), "
-        "'kill' (terminate), 'write' (send raw stdin data without newline), "
-        "'submit' (send data + Enter, for answering prompts), 'close' (close stdin/send EOF)."
-    ),
+    "description": "Control background processes from terminal(background=true): list/poll/log/wait/kill/write/submit/close.",
     "parameters": {
         "type": "object",
         "properties": {
             "action": {
                 "type": "string",
                 "enum": ["list", "poll", "log", "wait", "kill", "write", "submit", "close"],
-                "description": "Action to perform on background processes"
+                "description": "Action"
             },
             "session_id": {
                 "type": "string",
-                "description": "Process session ID (from terminal background output). Required for all actions except 'list'."
+                "description": "Process ID (required except for list)"
             },
             "data": {
                 "type": "string",
-                "description": "Text to send to process stdin (for 'write' and 'submit' actions)"
+                "description": "stdin text (write/submit)"
             },
             "timeout": {
                 "type": "integer",
-                "description": "Max seconds to block for 'wait' action. Returns partial output on timeout.",
+                "description": "Max seconds for wait",
                 "minimum": 1
             },
             "offset": {
                 "type": "integer",
-                "description": "Line offset for 'log' action (default: last 200 lines)"
+                "description": "Line offset (log)"
             },
             "limit": {
                 "type": "integer",
-                "description": "Max lines to return for 'log' action",
+                "description": "Max lines (log)",
                 "minimum": 1
             }
         },
