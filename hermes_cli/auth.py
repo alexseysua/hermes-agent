@@ -274,6 +274,18 @@ PROVIDER_REGISTRY: Dict[str, ProviderConfig] = {
         api_key_env_vars=("XIAOMI_API_KEY",),
         base_url_env_var="XIAOMI_BASE_URL",
     ),
+    "9router": ProviderConfig(
+        id="9router",
+        name="9Router",
+        auth_type="api_key",
+        # Local 9router proxy — OpenAI-compatible aggregator that routes to
+        # 40+ providers with subscription → cheap → free fallback.
+        # Default points at the local dashboard; override via NINEROUTER_BASE_URL
+        # to reach a remote 9router instance (e.g. on a VPS).
+        inference_base_url="http://localhost:20128/v1",
+        api_key_env_vars=("NINEROUTER_API_KEY", "NINE_ROUTER_API_KEY"),
+        base_url_env_var="NINEROUTER_BASE_URL",
+    ),
 }
 
 

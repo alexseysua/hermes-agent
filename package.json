@@ -4,7 +4,9 @@
   "description": "An AI agent with advanced tool-calling capabilities, featuring a flexible toolsets system for organizing and managing tools.",
   "private": true,
   "scripts": {
-    "postinstall": "echo '✅ Browser tools ready. Run: python run_agent.py --help'"
+    "postinstall": "echo '✅ Browser tools ready. Run: python run_agent.py --help'",
+    "sync-9router": "python3 scripts/sync-9router-models.py",
+    "sync-9router:check": "python3 scripts/sync-9router-models.py --dry-run"
   },
   "repository": {
     "type": "git",

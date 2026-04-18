@@ -289,6 +289,57 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         "kimi-k2.5",
         "MiniMax-M2.5",
     ],
+    # 9Router — local OpenAI-compatible proxy routing to 40+ providers
+    # with subscription → cheap → free fallback. Model ids follow
+    # ``<provider-alias>/<model>`` form. See https://github.com/decolua/9router.
+    # Keep in sync with GET http://localhost:20128/v1/models.
+    "9router": [
+        # cc/ — Claude Code OAuth (subscription)
+        "cc/claude-haiku-4-5-20251001",
+        "cc/claude-opus-4-5-20251101",
+        "cc/claude-opus-4-6",
+        "cc/claude-opus-4-7",
+        "cc/claude-sonnet-4-5-20250929",
+        "cc/claude-sonnet-4-6",
+        # qw/ — Qwen direct OAuth
+        "qw/coder-model",
+        "qw/qwen3-coder-flash",
+        "qw/qwen3-coder-plus",
+        "qw/vision-model",
+        # kc/ — KiloCode gateway
+        "kc/anthropic/claude-opus-4-20250514",
+        "kc/anthropic/claude-sonnet-4-20250514",
+        "kc/deepseek/deepseek-chat",
+        "kc/deepseek/deepseek-reasoner",
+        "kc/google/gemini-2.5-flash",
+        "kc/google/gemini-2.5-pro",
+        "kc/openai/gpt-4.1",
+        "kc/openai/o3",
+        # kr/ — Kiro
+        "kr/MiniMax-M2.5",
+        "kr/claude-haiku-4.5",
+        "kr/claude-sonnet-4.5",
+        "kr/deepseek-3.1",
+        "kr/deepseek-3.2",
+        "kr/glm-5",
+        "kr/qwen3-coder-next",
+        # if/ — iFlow (free tier)
+        "if/deepseek-r1",
+        "if/deepseek-v3",
+        "if/deepseek-v3.1",
+        "if/deepseek-v3.2",
+        "if/glm-4.7",
+        "if/iflow-rome-30ba3b",
+        "if/kimi-k2",
+        "if/qwen3-235b",
+        "if/qwen3-235b-a22b-instruct",
+        "if/qwen3-235b-a22b-thinking-2507",
+        "if/qwen3-32b",
+        "if/qwen3-coder-plus",
+        "if/qwen3-max",
+        "if/qwen3-max-preview",
+        "if/qwen3-vl-plus",
+    ],
     # Curated HF model list — only agentic models that map to OpenRouter defaults.
     "huggingface": [
         "Qwen/Qwen3.5-397B-A17B",
@@ -533,6 +584,7 @@ CANONICAL_PROVIDERS: list[ProviderEntry] = [
     ProviderEntry("opencode-zen",   "OpenCode Zen",             "OpenCode Zen (35+ curated models, pay-as-you-go)"),
     ProviderEntry("opencode-go",    "OpenCode Go",              "OpenCode Go (open models, $10/month subscription)"),
     ProviderEntry("ai-gateway",     "Vercel AI Gateway",        "Vercel AI Gateway (200+ models, pay-per-use)"),
+    ProviderEntry("9router",        "9Router",                  "9Router (local proxy, 40+ providers, free+cheap fallback)"),
 ]
 
 # Derived dicts — used throughout the codebase
@@ -587,6 +639,11 @@ _PROVIDER_ALIASES = {
     "grok": "xai",
     "x-ai": "xai",
     "x.ai": "xai",
+    "nine-router": "9router",
+    "nine_router": "9router",
+    "9-router": "9router",
+    "9_router": "9router",
+    "nrouter": "9router",
 }
 
 
